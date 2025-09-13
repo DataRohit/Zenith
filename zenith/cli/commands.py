@@ -80,13 +80,34 @@ def main(
             config_json: Path = zenith_dir / "config.json"
             config_env: Path = zenith_dir / ".config.env"
 
+            # Check If Both Configuration Files Exist
+            if config_json.is_file() and config_env.is_file():
+                # Show Error
+                console.print(
+                    Panel(
+                        Text(
+                            "Both config.json And .config.env Files Exist In The .zenith Directory!\n"
+                            "Please Remove One Of Them And Try Again!",
+                            style="bold red",
+                            justify="center",
+                        ),
+                        title="[bold red]Configuration Error[/bold red]",
+                        border_style="red",
+                        expand=True,
+                        padding=(1, 2),
+                    ),
+                )
+
+                # Exit The Application
+                raise typer.Exit(code=1)
+
             # If Only The config.json File Exists
             if config_json.is_file():
                 # Set The Configuration Path
                 config = config_json
 
             # If Only The .config.env File Exists
-            elif config_env.is_file():
+            if config_env.is_file():
                 # Set The Configuration Path
                 config = config_env
 
