@@ -3,6 +3,9 @@ import asyncio
 
 # Third Party Imports
 from autogen_agentchat.agents import AssistantAgent
+from openai import APITimeoutError
+from openai import BadRequestError
+from openai import NotFoundError
 from rich.console import Console
 from rich.text import Text
 
@@ -39,7 +42,7 @@ def display_initial_message(console: Console) -> None:
     message.append("\t: ", style="white")
 
     # Add Message In Yellow
-    message.append("To Stop The Program Execution Enter Quit/Exit", style="bold yellow")
+    message.append("To Stop The Program Execution Enter Quit/Exit.", style="bold yellow")
 
     # Print The Message
     console.print("")
@@ -158,6 +161,44 @@ def display_agent_prompt(console: Console, agent_name: str) -> None:
     console.print(prompt, end="")
 
 
+# Function To Display Error Message
+def display_error_message(console: Console, error_message: str) -> None:
+    """
+    Displays An Error Message
+
+    Args:
+        console (Console): The Rich Console
+        error_message (str): The Error Message
+    """
+
+    # Get The Current Date And Time
+    date_str, time_str = get_current_datetime()
+
+    # Create A Composite Text Object With Different Colors
+    message: Text = Text()
+
+    # Add Date In Cyan
+    message.append("[", style="white")
+    message.append(date_str, style="bold cyan")
+    message.append(" ", style="white")
+
+    # Add Time In Green
+    message.append(time_str, style="bold green")
+    message.append("] ", style="white")
+
+    # Add Error Label In Red
+    message.append("Error", style="bold red")
+    message.append("\t: ", style="white")
+
+    # Add Message In Red
+    message.append(error_message, style="bold red")
+
+    # Print The Message
+    console.print("")
+    console.print(message)
+    console.print("")
+
+
 # Function To Process Agent Response
 async def process_agent_response(console: Console, agent: AssistantAgent, user_input: str) -> None:
     """
@@ -233,6 +274,27 @@ def start_chat(agent: AssistantAgent) -> None:
 
         # Display Closing Message
         display_closing_message(console)
+
+    except BadRequestError:
+        # Display A New Line For Better Formatting
+        console.print("")
+
+        # Display Error Message Using Consistent Formatting
+        display_error_message(console, "Invalid API Key! Please Pass A Valid API Key!")
+
+    except APITimeoutError:
+        # Display A New Line For Better Formatting
+        console.print("")
+
+        # Display Error Message Using Consistent Formatting
+        display_error_message(console, "API Timeout! Please Check API Base URL And API Key!")
+
+    except NotFoundError:
+        # Display A New Line For Better Formatting
+        console.print("")
+
+        # Display Error Message Using Consistent Formatting
+        display_error_message(console, "Invalid Model! Please Check Model Name!")
 
 
 # Exports
