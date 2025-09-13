@@ -1,27 +1,18 @@
-# Third Party Imports
-from rich.console import Console
-
 # Local Imports
-from zenith.cli.interface import create_panel
+from zenith.cli import app
 
 
-# Main Function
-def main() -> None:
+# Runs The Typer App
+def run() -> None:
     """
-    Main Function
+    Runs The Typer App
     """
 
-    # Create Console
-    console = Console()
-
-    # Create Panel
-    panel = create_panel()
-
-    # Print Panel
-    console.print(panel)
+    # Run The App
+    app()
 
 
 # If The Script Is Run Directly
 if __name__ == "__main__":
-    # Run Main Function
-    main()
+    # Run The App
+    run()
