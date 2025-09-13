@@ -12,6 +12,7 @@ from rich.text import Text
 
 # Local Imports
 from zenith.agent import create_assistant_agent
+from zenith.agent import start_chat
 from zenith.cli.app import app
 from zenith.cli.callbacks import help_callback
 from zenith.cli.config_display import display_config
@@ -172,6 +173,9 @@ def chat(
 
     # Print The Panel
     console.print(panel)
+
+    # Start The Chat Session
+    start_chat(agent)
 
 
 # Exports

@@ -4,13 +4,10 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 
 # Third Party Imports
-import pytest
-import typer
 from typer.testing import CliRunner
 
 # Local Imports
 from zenith.cli.app import app
-from zenith.cli.commands import chat
 
 # Create A Runner
 runner = CliRunner()
@@ -290,6 +287,7 @@ def test_main_with_config_loading_no_exception_handling(
 
 
 # Test For The Chat Command
+@patch("zenith.cli.commands.start_chat")
 @patch("zenith.cli.commands.create_assistant_agent")
 @patch("zenith.cli.commands.Console")
 @patch("zenith.cli.commands.Table")
@@ -299,6 +297,7 @@ def test_chat_command(
     mock_table: MagicMock,
     mock_console: MagicMock,
     mock_create_assistant_agent: MagicMock,
+    mock_start_chat: MagicMock,
 ) -> None:
     """
     Tests The Chat Command
@@ -308,6 +307,7 @@ def test_chat_command(
         mock_table (MagicMock): The Mock For Table
         mock_console (MagicMock): The Mock For Console
         mock_create_assistant_agent (MagicMock): The Mock For create_assistant_agent
+        mock_start_chat (MagicMock): The Mock For start_chat
     """
 
     # Create A Mock Console Instance
@@ -359,3 +359,6 @@ def test_chat_command(
 
     # Assert Console.print Was Called With The Panel
     mock_console_instance.print.assert_called_with(mock_panel_instance)
+
+    # Assert start_chat Was Called With The Agent
+    mock_start_chat.assert_called_once_with(mock_agent)

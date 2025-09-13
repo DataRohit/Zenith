@@ -3,10 +3,7 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 
 # Third Party Imports
-import pytest
-from autogen_agentchat.agents import AssistantAgent
 from autogen_core.models import ModelFamily
-from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 # Local Imports
 from zenith.agent.agent import create_assistant_agent
@@ -72,7 +69,7 @@ def test_create_model_client_with_defaults(mock_client: MagicMock) -> None:
 
     # Assert OpenAIChatCompletionClient Was Called With The Correct Arguments
     mock_client.assert_called_once_with(
-        model="gpt-4",
+        model="",
         base_url="",
         api_key="",
         model_info={
@@ -102,20 +99,33 @@ def test_create_assistant_agent(
     # Create A Sample Configuration
     config = {"zenith_openai_api_key": "test_key"}
 
-    # Call The Function
-    result = create_assistant_agent(config)
+    # Mock Configuration Values
+    mock_description = "Test Description"
+    mock_system_message = "Test System Message"
+
+    # Create A Mock Config Dictionary With get Method
+    mock_config = MagicMock()
+    mock_config.get.side_effect = lambda key, default: {
+        "zenith_assistant_description": mock_description,
+        "zenith_assistant_system_message": mock_system_message,
+    }.get(key, default)
+
+    # Patch The Config Dictionary
+    with patch.dict(config, mock_config, clear=True):
+        # Call The Function With The Mock Config
+        result = create_assistant_agent(mock_config)
 
     # Assert The Result Is The Mock Assistant Instance
     assert result == mock_assistant.return_value
 
     # Assert create_model_client Was Called With The Correct Arguments
-    mock_create_model_client.assert_called_once_with(config)
+    mock_create_model_client.assert_called_once_with(mock_config)
 
     # Assert AssistantAgent Was Called With The Correct Arguments
     mock_assistant.assert_called_once_with(
         name="Zenith",
-        description="You Are Zenith, A CLI-Based AI Coding Agent That Transforms Natural Language Into Efficient, Production-Ready Code!",
-        system_message="You Are Zenith, A CLI-Based AI Coding Agent That Transforms Natural Language Into Efficient, Production-Ready Code!",
+        description=mock_description,
+        system_message=mock_system_message,
         model_client=mock_create_model_client.return_value,
         model_client_stream=True,
     )
