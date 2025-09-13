@@ -74,4 +74,4 @@ def mask_api_key(api_key: str) -> str:
 
 
 # Exports
-__all__: list[str] = ["display_config"]
+__all__: list[str] = ["display_config", "mask_api_key"]

@@ -17,7 +17,6 @@ from zenith.cli.callbacks import help_callback
 from zenith.cli.config_display import display_config
 from zenith.cli.interface import create_panel
 from zenith.utils import load_config
-from zenith.utils import show_error_and_exit
 
 # Type Checking
 if TYPE_CHECKING:
@@ -81,17 +80,8 @@ def main(
             config_json: Path = zenith_dir / "config.json"
             config_env: Path = zenith_dir / ".config.env"
 
-            # Check If Both Configuration Files Exist
-            if config_json.is_file() and config_env.is_file():
-                # Show An Error Message And Exit
-                show_error_and_exit(
-                    console,
-                    "Both 'config.json' and '.config.env' found in '.zenith' directory.\n"
-                    "Please Provide Only One Configuration File.",
-                )
-
             # If Only The config.json File Exists
-            elif config_json.is_file():
+            if config_json.is_file():
                 # Set The Configuration Path
                 config = config_json
 
@@ -100,32 +90,14 @@ def main(
                 # Set The Configuration Path
                 config = config_env
 
-    # If The Configuration File Is Not Found
-    if config is None:
-        # Show An Error Message And Exit
-        show_error_and_exit(
-            console,
-            (
-                "Configuration File Not Found!\n"
-                "Use The --config/-c Flag To Provide Config File Path\n"
-                "Or Create .zenith Directory In Current Working Directory And Create Config File In It.\n"
-                "Use The --help/-h Flag To See Full Implementation."
-            ),
-        )
+    # Load The Configuration
+    config_dict: dict[str, str] = load_config(config)
 
-    try:
-        # Load The Configuration
-        config_dict: dict[str, str] = load_config(config)
+    # Store The Configuration In The Context
+    ctx.obj = config_dict
 
-        # Store The Configuration In The Context
-        ctx.obj = config_dict
-
-        # Display The Configuration
-        display_config(console, config_dict)
-
-    except Exception as e:  # noqa: BLE001
-        # Show An Error Message And Exit
-        show_error_and_exit(console, f"Error Loading Configuration File: {e!s}")
+    # Display The Configuration
+    display_config(console, config_dict)
 
 
 # Chat Command For The Zenith CLI Application
