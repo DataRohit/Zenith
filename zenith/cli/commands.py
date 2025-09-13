@@ -1,47 +1,24 @@
 # Standard Library Imports
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Annotated
-from typing import NoReturn
 
 # Third Party Imports
 import typer
-from rich.align import Align
 from rich.console import Console
-from rich.panel import Panel
-from rich.text import Text
 
 # Local Imports
 from zenith.cli.app import app
 from zenith.cli.callbacks import help_callback
+from zenith.cli.config_display import display_config
 from zenith.cli.interface import create_panel
+from zenith.utils import load_config
+from zenith.utils import show_error_and_exit
 
-
-# Helper Function To Show An Error Message And Exit
-def _show_error_and_exit(console: Console, message: str) -> NoReturn:
-    """
-    Creates And Displays An Error Panel, Then Exits The Application.
-
-    Args:
-        console (Console): The Rich Console
-        message (str): The Error Message To Display
-
-    Raises:
-        typer.Exit: Exits The Application With A Non-Zero Code
-    """
-
-    # Create An Error Panel
-    error_panel: Panel = Panel(
-        Align.center(Text(message, justify="center")),
-        title="[bold red]Error[/bold red]",
-        border_style="red",
-        expand=True,
-    )
-
-    # Print The Error Panel
-    console.print(error_panel)
-
-    # Exit The Application With A Non-Zero Code
-    raise typer.Exit(code=1)
+# Type Checking
+if TYPE_CHECKING:
+    # Third Party Imports
+    from rich.panel import Panel
 
 
 # The Main Command For The Zenith CLI Application
@@ -103,7 +80,7 @@ def main(
             # Check If Both Configuration Files Exist
             if config_json.is_file() and config_env.is_file():
                 # Show An Error Message And Exit
-                _show_error_and_exit(
+                show_error_and_exit(
                     console,
                     "Both 'config.json' and '.config.env' found in '.zenith' directory.\n"
                     "Please Provide Only One Configuration File.",
@@ -122,7 +99,7 @@ def main(
     # If The Configuration File Is Not Found
     if config is None:
         # Show An Error Message And Exit
-        _show_error_and_exit(
+        show_error_and_exit(
             console,
             (
                 "Configuration File Not Found!\n"
@@ -131,6 +108,20 @@ def main(
                 "Use The --help/-h Flag To See Full Implementation."
             ),
         )
+
+    try:
+        # Load The Configuration
+        config_dict: dict[str, str] = load_config(config)
+
+        # Store The Configuration In The Context
+        ctx.obj = config_dict
+
+        # Display The Configuration
+        display_config(console, config_dict)
+
+    except Exception as e:  # noqa: BLE001
+        # Show An Error Message And Exit
+        show_error_and_exit(console, f"Error Loading Configuration File: {e!s}")
 
 
 # Exports

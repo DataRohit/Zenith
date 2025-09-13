@@ -132,3 +132,6 @@ Temporary Items
 # SonarQube
 .scannerwork/
 .sonar/
+
+# Zenith
+.zenith/
