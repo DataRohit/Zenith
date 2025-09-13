@@ -10,6 +10,7 @@ from typer.testing import CliRunner
 
 # Local Imports
 from zenith.cli.app import app
+from zenith.cli.commands import chat
 from zenith.utils.errors import show_error_and_exit
 
 # Create A Runner
@@ -271,6 +272,7 @@ def test_main_with_config_loading_exception(
         mock_load_config (MagicMock): The Mock For load_config
         mock_create_panel (MagicMock): The Mock Create Panel
     """
+
     # Set Up The Mock To Raise An Exception
     mock_load_config.side_effect = ValueError("Invalid JSON format")
 
@@ -294,3 +296,75 @@ def test_main_with_config_loading_exception(
 
         # Assert load_config Was Called With The Config Path
         mock_load_config.assert_called_once_with(config_path)
+
+
+# Test For The Chat Command
+@patch("zenith.cli.commands.create_assistant_agent")
+@patch("zenith.cli.commands.Console")
+@patch("zenith.cli.commands.Table")
+@patch("zenith.cli.commands.Panel")
+def test_chat_command(
+    mock_panel: MagicMock,
+    mock_table: MagicMock,
+    mock_console: MagicMock,
+    mock_create_assistant_agent: MagicMock,
+) -> None:
+    """
+    Tests The Chat Command
+
+    Args:
+        mock_panel (MagicMock): The Mock For Panel
+        mock_table (MagicMock): The Mock For Table
+        mock_console (MagicMock): The Mock For Console
+        mock_create_assistant_agent (MagicMock): The Mock For create_assistant_agent
+    """
+
+    # Create A Mock Console Instance
+    mock_console_instance = MagicMock()
+    mock_console.return_value = mock_console_instance
+
+    # Create A Mock Table Instance
+    mock_table_instance = MagicMock()
+    mock_table.grid.return_value = mock_table_instance
+
+    # Create A Mock Panel Instance
+    mock_panel_instance = MagicMock()
+    mock_panel.return_value = mock_panel_instance
+
+    # Create A Mock Agent
+    mock_agent = MagicMock()
+    mock_agent.name = "Zenith"
+    mock_agent.description = "Test Description"
+    mock_create_assistant_agent.return_value = mock_agent
+
+    # Create Test Config
+    test_config = {"zenith_openai_api_key": "test_key"}
+
+    # Create A Test Context Object For The Command
+    test_ctx = MagicMock()
+    test_ctx.obj = test_config
+
+    # Call The Function Directly
+    from zenith.cli.commands import chat
+    chat(test_ctx)
+
+    # Assert Console Was Created
+    mock_console.assert_called_once()
+
+    # Assert create_assistant_agent Was Called With The Correct Arguments
+    mock_create_assistant_agent.assert_called_once_with(test_config)
+
+    # Assert Table.grid Was Called
+    mock_table.grid.assert_called_once_with(expand=True)
+
+    # Assert Table.add_column Was Called
+    mock_table_instance.add_column.assert_called_once()
+
+    # Assert Table.add_row Was Called Two Times (Name, Description)
+    assert mock_table_instance.add_row.call_count == 2
+
+    # Assert Panel Was Created
+    mock_panel.assert_called_once()
+
+    # Assert Console.print Was Called With The Panel
+    mock_console_instance.print.assert_called_with(mock_panel_instance)

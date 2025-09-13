@@ -6,8 +6,12 @@ from typing import Annotated
 # Third Party Imports
 import typer
 from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
 
 # Local Imports
+from zenith.agent import create_assistant_agent
 from zenith.cli.app import app
 from zenith.cli.callbacks import help_callback
 from zenith.cli.config_display import display_config
@@ -18,7 +22,7 @@ from zenith.utils import show_error_and_exit
 # Type Checking
 if TYPE_CHECKING:
     # Third Party Imports
-    from rich.panel import Panel
+    from autogen_agentchat.agents import AssistantAgent
 
 
 # The Main Command For The Zenith CLI Application
@@ -124,5 +128,58 @@ def main(
         show_error_and_exit(console, f"Error Loading Configuration File: {e!s}")
 
 
+# Chat Command For The Zenith CLI Application
+@app.command("chat")
+def chat(
+    ctx: typer.Context,
+) -> None:
+    """
+    Start A Chat Session With The Zenith AI Assistant
+
+    Args:
+        ctx (typer.Context): The Typer Context
+    """
+
+    # Create A Rich Console
+    console: Console = Console()
+
+    # Get The Configuration From The Context
+    config: dict[str, str] = ctx.obj
+
+    # Create The Assistant Agent
+    agent: AssistantAgent = create_assistant_agent(config)
+
+    # Get Agent Name And Properties
+    agent_name: str = agent.name
+    description: str = agent.description
+
+    # Create Table For Layout
+    table: Table = Table.grid(expand=True)
+    table.add_column(justify="center")
+
+    # Add Content To The Table
+    table.add_row(Text("Agent Name:", style="#FF6B6B") + Text(f" {agent_name}", style="#00BFFF"))
+
+    # Add Description With Markdown On Same Line
+    description_text = (
+        Text("Description:", style="#FF6B6B") + Text(" ", style="default") + Text(description, style="#00BFFF")
+    )
+    description_text.justify = "center"
+    table.add_row(description_text)
+
+    # Create And Print The Panel
+    panel: Panel = Panel(
+        table,
+        title="[bold green]Agent Initialized Successfully[/bold green]",
+        title_align="center",
+        border_style="bold green",
+        expand=True,
+        padding=(1, 2),
+    )
+
+    # Print The Panel
+    console.print(panel)
+
+
 # Exports
-__all__: list[str] = ["main"]
+__all__: list[str] = ["chat", "main"]
