@@ -1,0 +1,67 @@
+# GitHub Actions Workflow For Automated Package Publication To PyPI
+# This Workflow Builds And Publishes New Package Versions To PyPI When A Release Is Published And A Version Tag Is Pushed
+name: Publish Python Package
+
+# Trigger The Workflow On Release Published Events And Tag Pushes
+# Example Tags: v1.0.0, v2.1.3, v0.5.0-beta
+on:
+    release:
+        types: [published]
+
+jobs:
+    # Main Publish Job That Builds And Publishes The Package
+    build-and-publish:
+        # Use Latest Ubuntu Runner For Building
+        runs-on: ubuntu-latest
+
+        # Add Permissions Needed For Trusted Publishing
+        permissions:
+            contents: read
+            id-token: write
+
+        steps:
+            # Step 1: Check Out The Repository Code At The Tagged Version
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0 # Fetch All History And Tags
+
+            # Step 2: Set Up Python Environment
+            # Using Python 3.13 For Building To Ensure Compatibility
+            - name: Set Up Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.13"
+
+            # Step 3: Install Build For Packaging
+            # We Only Need Build Since We're Using Trusted Publisher
+            - name: Install Build
+              run: |
+                  # Install Build Dependencies Explicitly First
+                  pip install setuptools wheel setuptools_scm>=6.2
+                  # Install Build Tool
+                  pip install build
+
+            # Step 4: Build Package
+            # This Step Builds The Source Distribution And Wheel
+            - name: Build Package
+              run: |
+                  # Debug Environment Variables
+                  echo "GitHub Release Tag: ${{ github.event.release.tag_name }}"
+
+                  # For Releases, Extract Version From The Release Tag Name
+                  VERSION=$(echo "${{ github.event.release.tag_name }}" | sed 's/^v//')
+                  echo "Building Version: $VERSION"
+
+                  # Disable setuptools_scm Entirely
+                  export SETUPTOOLS_SCM_PRETEND_VERSION=$VERSION
+
+                  # Build The Package With Explicit Version
+                  python -m build --no-isolation
+
+                  # Show Built Packages
+                  ls -la dist/
+
+            # Step 5: Publish Package To PyPI Using Trusted Publisher
+            # This Uses OIDC Authentication Instead Of A Token
+            - name: Publish Package To PyPI
+              uses: pypa/gh-action-pypi-publish@release/v1

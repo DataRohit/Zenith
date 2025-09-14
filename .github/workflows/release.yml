@@ -1,0 +1,77 @@
+# GitHub Actions Workflow For Automated Package Releases
+# This Workflow Builds And Publishes New Package Versions When A Version Tag Is Pushed
+name: Release
+
+# Trigger The Workflow Only When A Version Tag (v*) Is Pushed
+# Example Tags: v1.0.0, v2.1.3, v0.5.0-beta
+on:
+    push:
+        tags:
+            - "v*"
+
+jobs:
+    # Main Release Job That Builds And Publishes The Package
+    release:
+        # Use Latest Ubuntu Runner For Building
+        runs-on: ubuntu-latest
+
+        steps:
+            # Step 1: Check Out The Repository Code At The Tagged Version
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0 # Fetch All History And Tags
+
+            # Step 2: Set Up Python Environment
+            # Using Python 3.13 For Building To Ensure Compatibility
+            - name: Set Up Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.13"
+
+            # Step 3: Install Build Dependencies
+            - name: Install Dependencies
+              run: |
+                  # Upgrade pip To Latest Version
+                  python -m pip install --upgrade pip
+                  # Install Build Dependencies Explicitly
+                  python -m pip install setuptools wheel setuptools_scm>=6.2
+                  # Install Project In Editable Mode With Dev Dependencies
+                  python -m pip install -e ".[dev]"
+                  # Install Build Tools For Packaging
+                  python -m pip install build
+
+            # Step 4: Build Source Distribution And Wheel
+            - name: Build Package
+              run: |
+                  # Debug Information
+                  echo "GitHub Ref: $GITHUB_REF"
+                  echo "GitHub Ref Name: $GITHUB_REF_NAME"
+
+                  # Extract Version From Git Tag (Remove 'v' Prefix)
+                  VERSION=$(echo $GITHUB_REF_NAME | sed 's/^v//')
+                  echo "Building Version: $VERSION"
+
+                  # Disable setuptools_scm Entirely By Setting Environment Variables
+                  export SETUPTOOLS_SCM_PRETEND_VERSION=$VERSION
+
+                  # Build The Package With Explicit Version
+                  python -m build --no-isolation
+
+                  # Verify Version In Built Packages
+                  echo "Built Packages In Dist/"
+                  ls -la dist/
+
+            # Step 5: Create GitHub Release With Built Artifacts
+            # This Step Uploads The Built Distributions And Generates Release Notes
+            - name: Create GitHub Release
+              uses: softprops/action-gh-release@v1
+              with:
+                  # Include Both Source Distribution And Wheel In The Release
+                  files: |
+                      dist/*.tar.gz
+                      dist/*.whl
+                  # Automatically Generate Release Notes From Commits
+                  generate_release_notes: true
+              env:
+                  # Use Repository-Specific Token For Authentication
+                  GITHUB_TOKEN: ${{ secrets.ZENITH_REPO_TOKEN }}

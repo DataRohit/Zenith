@@ -1,0 +1,49 @@
+# GitHub Actions Workflow For Continuous Integration
+# This Workflow Runs Automated Tests And Quality Checks On The Codebase
+name: CI
+
+# Trigger The Workflow On Push And Pull Request Events, But Only For The Master Branch
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+
+jobs:
+    # Main Test Job That Runs The Test Suite Across Multiple Python Versions
+    test:
+        # Use Latest Ubuntu Runner For Testing
+        runs-on: ubuntu-latest
+
+        # Test Strategy Configuration
+        strategy:
+            # Define Test Matrix For Python Version
+            matrix:
+                # Test Against Python 3.13 To Ensure Compatibility
+                python-version: ["3.13"]
+
+        steps:
+            # Step 1: Check Out The Repository Code
+            - uses: actions/checkout@v3
+
+            # Step 2: Set Up Python Environment For The Specified Version
+            - name: Set Up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v4
+              with:
+                  python-version: ${{ matrix.python-version }}
+
+            # Step 3: Install Project Dependencies Including Development Requirements
+            - name: Install Dependencies
+              run: |
+                  # Upgrade pip To Latest Version
+                  python -m pip install --upgrade pip
+                  # Install Project In Editable Mode With Dev Dependencies
+                  python -m pip install -e ".[dev]"
+
+            # Step 4: Run The Test Suite And Code Quality Checks
+            - name: Run Checks
+              run: |
+                  # Run Ruff Linter In Check Mode
+                  ruff check .
+                  # Run Pytest With Coverage
+                  pytest -q
