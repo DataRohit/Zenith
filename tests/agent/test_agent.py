@@ -11,6 +11,7 @@ from zenith.agent.agent import create_model_client
 from zenith.agent.tools.list_files import list_files
 from zenith.agent.tools.make_directory import make_directory
 from zenith.agent.tools.read_file import read_file
+from zenith.agent.tools.read_multiple_files import read_multiple_files
 from zenith.agent.tools.search_files import search_files
 from zenith.agent.tools.write_file import write_file
 
@@ -150,7 +151,7 @@ def test_create_assistant_agent(
         model_client_stream=True,
         memory=[mock_list_memory.return_value],
         model_context=mock_buffered_context.return_value,
-        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
+        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
         max_tool_iterations=16,
     )
 
@@ -181,6 +182,15 @@ def test_create_assistant_agent(
         description=(
             "Read The Contents Of A File, With Options For Specifying Line Ranges "
             "And File Encoding."
+        ),
+    )
+
+    # Assert FunctionTool Was Called With The Correct Arguments For read_multiple_files
+    mock_function_tool.assert_any_call(
+        func=read_multiple_files,
+        name="read_multiple_files",
+        description=(
+            "Reads The Contents Of Multiple Files, With Options For Specifying Line Ranges And File Encoding."
         ),
     )
 
@@ -271,7 +281,7 @@ def test_create_assistant_agent_with_custom_values(
         model_client_stream=True,
         memory=[mock_list_memory.return_value],
         model_context=mock_buffered_context.return_value,
-        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
+        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
         max_tool_iterations=16,
     )
 
@@ -302,6 +312,15 @@ def test_create_assistant_agent_with_custom_values(
         description=(
             "Read The Contents Of A File, With Options For Specifying Line Ranges "
             "And File Encoding."
+        ),
+    )
+
+    # Assert FunctionTool Was Called With The Correct Arguments For read_multiple_files
+    mock_function_tool.assert_any_call(
+        func=read_multiple_files,
+        name="read_multiple_files",
+        description=(
+            "Reads The Contents Of Multiple Files, With Options For Specifying Line Ranges And File Encoding."
         ),
     )
 
