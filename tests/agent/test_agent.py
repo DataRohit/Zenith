@@ -12,6 +12,7 @@ from zenith.agent.tools.list_files import list_files
 from zenith.agent.tools.make_directory import make_directory
 from zenith.agent.tools.read_file import read_file
 from zenith.agent.tools.search_files import search_files
+from zenith.agent.tools.write_file import write_file
 
 
 # Test For create_model_client Function
@@ -149,7 +150,7 @@ def test_create_assistant_agent(
         model_client_stream=True,
         memory=[mock_list_memory.return_value],
         model_context=mock_buffered_context.return_value,
-        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
+        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
         max_tool_iterations=16,
     )
 
@@ -190,6 +191,28 @@ def test_create_assistant_agent(
         description=(
             "Search For Files Matching A Pattern In The Specified Directory, "
             "With Options For Case Sensitivity And File Type Filtering."
+        ),
+    )
+
+    # Assert FunctionTool Was Called With The Correct Arguments For write_file
+    mock_function_tool.assert_any_call(
+        func=write_file,
+        name="write_file",
+        description=(
+            "Write Content To A File At The Specified Path, "
+            "With Options For Appending, Creating Parent Directories, "
+            "And Specifying File Encoding."
+        ),
+    )
+
+    # Assert FunctionTool Was Called With The Correct Arguments For write_file
+    mock_function_tool.assert_any_call(
+        func=write_file,
+        name="write_file",
+        description=(
+            "Write Content To A File At The Specified Path, "
+            "With Options For Appending, Creating Parent Directories, "
+            "And Specifying File Encoding."
         ),
     )
 
@@ -248,7 +271,7 @@ def test_create_assistant_agent_with_custom_values(
         model_client_stream=True,
         memory=[mock_list_memory.return_value],
         model_context=mock_buffered_context.return_value,
-        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
+        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
         max_tool_iterations=16,
     )
 
@@ -289,5 +312,16 @@ def test_create_assistant_agent_with_custom_values(
         description=(
             "Search For Files Matching A Pattern In The Specified Directory, "
             "With Options For Case Sensitivity And File Type Filtering."
+        ),
+    )
+
+    # Assert FunctionTool Was Called With The Correct Arguments For write_file
+    mock_function_tool.assert_any_call(
+        func=write_file,
+        name="write_file",
+        description=(
+            "Write Content To A File At The Specified Path, "
+            "With Options For Appending, Creating Parent Directories, "
+            "And Specifying File Encoding."
         ),
     )

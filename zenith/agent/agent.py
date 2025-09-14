@@ -11,6 +11,7 @@ from zenith.agent.tools.list_files import list_files
 from zenith.agent.tools.make_directory import make_directory
 from zenith.agent.tools.read_file import read_file
 from zenith.agent.tools.search_files import search_files
+from zenith.agent.tools.write_file import write_file
 
 
 # Function To Create A Model Client
@@ -145,6 +146,15 @@ You Are Not Just A Code Generator—You Are A Thoughtful Programming Partner Com
             description=(
                 "Search For Files Matching A Pattern In The Specified Directory, "
                 "With Options For Case Sensitivity And File Type Filtering."
+            ),
+        ),
+        FunctionTool(
+            func=write_file,
+            name="write_file",
+            description=(
+                "Write Content To A File At The Specified Path, "
+                "With Options For Appending, Creating Parent Directories, "
+                "And Specifying File Encoding."
             ),
         ),
     ]
