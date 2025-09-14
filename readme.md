@@ -31,15 +31,11 @@
 ## 🖼️ Images
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/DataRohit/zenith-cli/master/static/images/zenith-chat.png" alt="Zenith Chat" width="700"/>
-  <br>
-  <em>An Interactive Chat Interface</em>
+  <img src="https://raw.githubusercontent.com/DataRohit/Zenith/refs/heads/master/static/images/zenith-help.png" alt="Zenith Help" width="100%"/>
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/DataRohit/zenith-cli/master/static/images/zenith-help.png" alt="Zenith Help" width="700"/>
-  <br>
-  <em>Extensible Toolset Help</em>
+  <img src="https://raw.githubusercontent.com/DataRohit/Zenith/refs/heads/master/static/images/zenith-chat.png" alt="Zenith Chat" width="100%"/>
 </p>
 
 ## 🌟 Features
@@ -140,49 +136,3 @@ Run Linting / Type Checking / Tests Locally:
 make ruff-check  # or 'make ruff-lint' to auto-fix issues
 pytest -q
 ```
-
--   Coverage Threshold Is Enforced At 100% Via `pytest.ini`.
--   HTML Coverage Report Is Generated At `htmlcov/index.html`.
-
-Ruff and Pytest are configured in `pyproject.toml`.
-
-## 📝 Makefile Commands
-
--   **help** — Show This Help Message
--   **Code Analysis:**
-    -   `ruff-check` — Run Ruff Linter In Check Mode
-    -   `ruff-lint` — Run Ruff Linter With Auto-Fix
--   **Cleaning:**
-    -   `clean-all` — Remove Python And Tooling Artifacts
-
-## 🔐 Environment Variables
-
-Environment variables are loaded from `.zenith-cli/config.json` or `.zenith-cli/.config.env`.
-
-**Critical:** Never commit sensitive values like API keys to version control.
-
-## 📦 Dependencies
-
-Pinned in `pyproject.toml` (and managed by `pip`). Key dependencies include:
-
--   `rich-cli`
--   `typer`
--   `python-dotenv`
--   `python-dateutil`
--   `autogen-agentchat`
--   `autogen-ext`
--   `autogen-ext[openai]`
--   `pytest` (dev)
--   `pytest-cov` (dev)
--   `pytest-asyncio` (dev)
--   `ruff` (dev)
-
-## 📄 License
-
-This Project Is Licensed Under The MIT License — See The [`license`](./license) File For Details.
-
-## 📞 Contact
-
-Rohit Ingole — <rohit.vilas.ingole@gmail.com>
-
-Project Link: <https://github.com/DataRohit/zenith-cli>
