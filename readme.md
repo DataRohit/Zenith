@@ -23,8 +23,6 @@
 [![Rich](https://img.shields.io/badge/Rich-1.8.1-darkblue.svg?logo=python&logoColor=white)](https://github.com/Textualize/rich)
 [![AutoGen](https://img.shields.io/badge/AutoGen-0.7.4-brightgreen.svg?logo=python&logoColor=white)](https://microsoft.github.io/autogen/)
 [![Python-Dateutil](https://img.shields.io/badge/Python--Dateutil-2.9.0-blue.svg)](https://dateutil.readthedocs.io/en/stable/)
-[![Python-Dotenv](https://img.io/badge/Python--Dotenv-1.1.1-green.svg)](https://pypi.org/project/python-dotenv/)
-[![OpenAI](https://img.io/badge/OpenAI-API-424242.svg?logo=openai&logoColor=white)](https://openai.com/docs/api-reference/)
 
 **A CLI-Based AI Coding Agent That Transforms Natural Language Into Efficient, Production-Ready Code.**
 
