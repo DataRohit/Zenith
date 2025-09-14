@@ -8,6 +8,8 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 # Local Imports
 from zenith.agent.tools.list_files import list_files
+from zenith.agent.tools.make_directory import make_directory
+from zenith.agent.tools.read_file import read_file
 from zenith.agent.tools.search_files import search_files
 
 
@@ -122,6 +124,20 @@ You Are Not Just A Code Generator—You Are A Thoughtful Programming Partner Com
             description=(
                 "List All Files and Folders with Metadata in a Tree-Like Structure, Respecting .gitignore Patterns."
             ),
+        ),
+        FunctionTool(
+            func=make_directory,
+            name="make_directory",
+            description=(
+                "Create A Directory At The Specified Path, "
+                "With Options For Creating Parent Directories "
+                "And Handling Existing Directories."
+            ),
+        ),
+        FunctionTool(
+            func=read_file,
+            name="read_file",
+            description=("Read The Contents Of A File, With Options For Specifying Line Ranges And File Encoding."),
         ),
         FunctionTool(
             func=search_files,
