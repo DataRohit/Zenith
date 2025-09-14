@@ -1,5 +1,16 @@
 # Zenith-CLI
 
+<div align="center">
+<pre>
+███████╗███████╗███╗   ██╗██╗████████╗██╗  ██╗
+╚══███╔╝██╔════╝████╗  ██║██║╚══██╔══╝██║  ██║
+  ███╔╝ █████╗  ██╔██╗ ██║██║   ██║   ███████║
+ ███╔╝  ██╔══╝  ██║╚██╗██║██║   ██║   ██╔══██║
+███████╗███████╗██║ ╚████║██║   ██║   ██║  ██║
+╚══════╝╚══════╝╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝
+</pre>
+</div>
+
 <!-- Project Status -->
 [![Project Status: Active](https://img.shields.io/badge/Project%20Status-Active-brightgreen)](https://github.com/datarohit/zenith-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./license)
@@ -16,6 +27,20 @@
 [![OpenAI](https://img.io/badge/OpenAI-API-424242.svg?logo=openai&logoColor=white)](https://openai.com/docs/api-reference/)
 
 **A CLI-Based AI Coding Agent That Transforms Natural Language Into Efficient, Production-Ready Code.**
+
+## 🖼️ Images
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/DataRohit/zenith-cli/master/static/images/zenith-chat.png" alt="Zenith Chat" width="700"/>
+  <br>
+  <em>An Interactive Chat Interface</em>
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/DataRohit/zenith-cli/master/static/images/zenith-help.png" alt="Zenith Help" width="700"/>
+  <br>
+  <em>Extensible Toolset Help</em>
+</p>
 
 ## 🌟 Features
 
