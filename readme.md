@@ -112,8 +112,16 @@ Notes:
 
 ### 4) Run Zenith-CLI
 
+To display help:
+
 ```bash
-zenith-cli chat
+zenith -h
+```
+
+To run the chat:
+
+```bash
+zenith -c <path-to-config-file> chat
 ```
 
 ## ⚙️ Configuration Highlights
@@ -134,3 +142,13 @@ Run Linting / Type Checking / Tests Locally:
 make ruff-check  # or 'make ruff-lint' to auto-fix issues
 pytest -q
 ```
+
+## 📄 License
+
+This Project Is Licensed Under The MIT License — See The [`license`](./license) File For Details.
+
+## 📞 Contact
+
+Rohit Ingole — <rohti.vilas.ingole@gmail.com>
+
+Project Link: <https://github.com/DataRohit/Zenith>
