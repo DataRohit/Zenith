@@ -1,5 +1,5 @@
 # Local Imports
-from zenith.cli import app
+from zenith.cli.app import app
 
 
 # Runs The Typer App

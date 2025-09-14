@@ -11,13 +11,13 @@ from rich.table import Table
 from rich.text import Text
 
 # Local Imports
-from zenith.agent import create_assistant_agent
-from zenith.agent import start_chat
+from zenith.agent.agent import create_assistant_agent
+from zenith.agent.chat.session import start_chat
 from zenith.cli.app import app
 from zenith.cli.callbacks import help_callback
 from zenith.cli.config_display import display_config
 from zenith.cli.interface import create_panel
-from zenith.utils import load_config
+from zenith.utils.config_loader import load_config
 
 # Type Checking
 if TYPE_CHECKING:
