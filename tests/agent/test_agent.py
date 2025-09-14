@@ -8,6 +8,8 @@ from autogen_core.models import ModelFamily
 # Local Imports
 from zenith.agent.agent import create_assistant_agent
 from zenith.agent.agent import create_model_client
+from zenith.agent.tools.list_files import list_files
+from zenith.agent.tools.search_files import search_files
 
 
 # Test For create_model_client Function
@@ -145,7 +147,25 @@ def test_create_assistant_agent(
         model_client_stream=True,
         memory=[mock_list_memory.return_value],
         model_context=mock_buffered_context.return_value,
-        tools=[mock_function_tool.return_value],
+        tools=[mock_function_tool.return_value, mock_function_tool.return_value],
+    )
+
+    # Assert FunctionTool Was Called With The Correct Arguments
+    mock_function_tool.assert_any_call(
+        func=list_files,
+        name="list_files",
+        description=(
+            "List All Files and Folders with Metadata in a Tree-Like Structure, Respecting .gitignore Patterns."
+        ),
+    )
+
+    # Assert FunctionTool Was Called With The Correct Arguments For search_files
+    mock_function_tool.assert_any_call(
+        func=search_files,
+        name="search_files",
+        description=(
+            "Search For Files Matching A Pattern In The Specified Directory, With Options For Case Sensitivity And File Type Filtering."
+        ),
     )
 
 
@@ -203,5 +223,23 @@ def test_create_assistant_agent_with_custom_values(
         model_client_stream=True,
         memory=[mock_list_memory.return_value],
         model_context=mock_buffered_context.return_value,
-        tools=[mock_function_tool.return_value],
+        tools=[mock_function_tool.return_value, mock_function_tool.return_value],
+    )
+
+    # Assert FunctionTool Was Called With The Correct Arguments
+    mock_function_tool.assert_any_call(
+        func=list_files,
+        name="list_files",
+        description=(
+            "List All Files and Folders with Metadata in a Tree-Like Structure, Respecting .gitignore Patterns."
+        ),
+    )
+
+    # Assert FunctionTool Was Called With The Correct Arguments For search_files
+    mock_function_tool.assert_any_call(
+        func=search_files,
+        name="search_files",
+        description=(
+            "Search For Files Matching A Pattern In The Specified Directory, With Options For Case Sensitivity And File Type Filtering."
+        ),
     )

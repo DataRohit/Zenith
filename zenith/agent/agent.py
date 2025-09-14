@@ -8,6 +8,7 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 # Local Imports
 from zenith.agent.tools.list_files import list_files
+from zenith.agent.tools.search_files import search_files
 
 
 # Function To Create A Model Client
@@ -120,6 +121,14 @@ You Are Not Just A Code Generator—You Are A Thoughtful Programming Partner Com
             name="list_files",
             description=(
                 "List All Files and Folders with Metadata in a Tree-Like Structure, Respecting .gitignore Patterns."
+            ),
+        ),
+        FunctionTool(
+            func=search_files,
+            name="search_files",
+            description=(
+                "Search For Files Matching A Pattern In The Specified Directory, "
+                "With Options For Case Sensitivity And File Type Filtering."
             ),
         ),
     ]
