@@ -10,6 +10,7 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 from zenith.agent.tools.list_files import list_files
 from zenith.agent.tools.make_directory import make_directory
 from zenith.agent.tools.read_file import read_file
+from zenith.agent.tools.replace_content import replace_content
 from zenith.agent.tools.search_files import search_files
 from zenith.agent.tools.write_file import write_file
 
@@ -139,6 +140,14 @@ You Are Not Just A Code Generator—You Are A Thoughtful Programming Partner Com
             func=read_file,
             name="read_file",
             description=("Read The Contents Of A File, With Options For Specifying Line Ranges And File Encoding."),
+        ),
+        FunctionTool(
+            func=replace_content,
+            name="replace_content",
+            description=(
+                "Replace The First Occurrence Of Old Content With New Content In A File, "
+                "With Options For Specifying File Encoding."
+            ),
         ),
         FunctionTool(
             func=search_files,

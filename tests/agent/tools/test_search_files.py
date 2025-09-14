@@ -11,7 +11,6 @@ import pytest
 
 # Local Imports
 from zenith.agent.tools.search_files import _find_project_root
-from zenith.agent.tools.search_files import _format_size
 from zenith.agent.tools.search_files import _gitignore_to_regex
 from zenith.agent.tools.search_files import _is_ignored
 from zenith.agent.tools.search_files import _load_gitignore_patterns
@@ -19,6 +18,7 @@ from zenith.agent.tools.search_files import _process_file
 from zenith.agent.tools.search_files import _should_skip_directory
 from zenith.agent.tools.search_files import search_files
 from zenith.agent.tools.search_files import _search_directory
+from zenith.utils.format_file_size import format_size
 
 
 # Fixture For Creating A Mock Project Structure
@@ -481,12 +481,12 @@ def test_format_size() -> None:
     """
 
     # Test With Various Sizes
-    assert _format_size(0) == "0.00 B"
-    assert _format_size(1023) == "1023.00 B"
-    assert _format_size(1024) == "1.00 KB"
-    assert _format_size(1024 * 1024) == "1.00 MB"
-    assert _format_size(1024 * 1024 * 1024) == "1.00 GB"
-    assert _format_size(1024 * 1024 * 1024 * 1024) == "1.00 TB"
+    assert format_size(0) == "0.00 B"
+    assert format_size(1023) == "1023.00 B"
+    assert format_size(1024) == "1.00 KB"
+    assert format_size(1024 * 1024) == "1.00 MB"
+    assert format_size(1024 * 1024 * 1024) == "1.00 GB"
+    assert format_size(1024 * 1024 * 1024 * 1024) == "1.00 TB"
 
 
 # Test Find Project Root Function

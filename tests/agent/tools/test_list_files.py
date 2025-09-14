@@ -13,12 +13,12 @@ import pytest
 from zenith.agent.tools.list_files import _build_tree
 from zenith.agent.tools.list_files import _create_node
 from zenith.agent.tools.list_files import _find_project_root
-from zenith.agent.tools.list_files import _format_size
 from zenith.agent.tools.list_files import _get_permissions
 from zenith.agent.tools.list_files import _gitignore_to_regex
 from zenith.agent.tools.list_files import _is_ignored
 from zenith.agent.tools.list_files import _load_gitignore_patterns
 from zenith.agent.tools.list_files import list_files
+from zenith.utils.format_file_size import format_size
 
 
 # Fixture For Creating A Mock Project Structure
@@ -263,6 +263,9 @@ def test_create_node(mock_project: Path) -> None:
     # Check The Node Has A Human-Readable Size
     assert isinstance(node["size_human"], str)
 
+    # Test The Human-Readable Size Is Correct
+    assert node["size_human"] == format_size(node["size"])
+
     # Check The Node Has Modified Time
     assert isinstance(node["modified_time"], str)
 
@@ -449,12 +452,12 @@ def test_format_size() -> None:
     """
 
     # Test With Various Sizes
-    assert _format_size(0) == "0.00 B"
-    assert _format_size(1023) == "1023.00 B"
-    assert _format_size(1024) == "1.00 KB"
-    assert _format_size(1024 * 1024) == "1.00 MB"
-    assert _format_size(1024 * 1024 * 1024) == "1.00 GB"
-    assert _format_size(1024 * 1024 * 1024 * 1024) == "1.00 TB"
+    assert format_size(0) == "0.00 B"
+    assert format_size(1023) == "1023.00 B"
+    assert format_size(1024) == "1.00 KB"
+    assert format_size(1024 * 1024) == "1.00 MB"
+    assert format_size(1024 * 1024 * 1024) == "1.00 GB"
+    assert format_size(1024 * 1024 * 1024 * 1024) == "1.00 TB"
 
 
 # Test Get Permissions Function

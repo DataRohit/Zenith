@@ -9,6 +9,7 @@ import pytest
 # Local Imports
 from zenith.agent.tools.read_file import file_exists
 from zenith.agent.tools.read_file import read_file
+from zenith.utils.format_file_size import format_size
 
 
 # Test Read File Function
@@ -334,23 +335,17 @@ def test_format_size() -> None:
     Tests The Format Size Function
     """
 
-    # Import The Function Directly
-    from zenith.agent.tools.read_file import _format_size
-
-    # Test Bytes
-    assert _format_size(500) == "500.00 B"
-
-    # Test Kilobytes
-    assert _format_size(1500) == "1.46 KB"
-
-    # Test Megabytes
-    assert _format_size(1500000) == "1.43 MB"
-
-    # Test Gigabytes
-    assert _format_size(1500000000) == "1.40 GB"
-
-    # Test Terabytes
-    assert _format_size(1500000000000) == "1.36 TB"
+    # Call The Function And Assert The Result
+    assert format_size(0) == "0.00 B"
+    assert format_size(500) == "500.00 B"
+    assert format_size(1024) == "1.00 KB"
+    assert format_size(1536) == "1.50 KB"
+    assert format_size(1048576) == "1.00 MB"
+    assert format_size(1073741824) == "1.00 GB"
+    assert format_size(1099511627776) == "1.00 TB"
+    assert format_size(1125899906842624) == "1.00 PB"
+    assert format_size(2000) == "1.95 KB"
+    assert format_size(2048) == "2.00 KB"
 
 
 # Test File Exists Function

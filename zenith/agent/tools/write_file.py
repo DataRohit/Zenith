@@ -3,6 +3,9 @@ import os
 from pathlib import Path
 from typing import Any
 
+# Local Imports
+from zenith.utils.format_file_size import format_size
+
 
 # Function To Write File Contents
 def write_file(
@@ -66,7 +69,7 @@ def write_file(
             "success": True,
             "path": str(abs_path),
             "size": file_size,
-            "size_human": _format_size(file_size),
+            "size_human": format_size(file_size),
             "encoding": encoding,
             "append": append,
         }
@@ -115,39 +118,6 @@ def file_is_writable(file_path: str) -> bool:
 
     # If The File Doesn't Exist, Check If The Parent Directory Is Writable
     return os.access(abs_path.parent, os.W_OK) if abs_path.parent.exists() else False
-
-
-# Helper Function To Format File Size
-def _format_size(size: int) -> str:
-    """
-    Formats The File Size In A Human-Readable Format
-
-    Args:
-        size (int): The File Size In Bytes
-
-    Returns:
-        str: The Formatted File Size
-    """
-
-    # Define Size Units
-    units: list[str] = ["B", "KB", "MB", "GB", "TB", "PB"]
-
-    # Initialize Unit Index
-    unit_index: int = 0
-
-    # Convert Size
-    size_float: float = float(size)
-
-    # While The Size Is Greater Than 1024
-    while size_float >= 1024 and unit_index < len(units) - 1:
-        # Divide By 1024
-        size_float /= 1024
-
-        # Increment Unit Index
-        unit_index += 1
-
-    # Return Formatted Size
-    return f"{size_float:.2f} {units[unit_index]}"
 
 
 # Exports

@@ -6,6 +6,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 
+from zenith.utils.format_file_size import format_size
+
 # Type Checking Imports
 if TYPE_CHECKING:
     # Standard Library Imports
@@ -187,7 +189,7 @@ def _process_file(  # noqa: PLR0913
         "name": item.name,
         "path": str(full_path),
         "size": stats.st_size,
-        "size_human": _format_size(stats.st_size),
+        "size_human": format_size(stats.st_size),
         "modified": stats.st_mtime,
         "type": "file",
     }
@@ -482,39 +484,6 @@ def _is_ignored(path: str, patterns: list[re.Pattern]) -> bool:
 
     # Check Each Pattern And Return True If Any Pattern Matches
     return any(pattern.search(path) for pattern in patterns)
-
-
-# Helper Function To Format File Size
-def _format_size(size: int) -> str:
-    """
-    Formats The File Size In A Human-Readable Format
-
-    Args:
-        size (int): The File Size In Bytes
-
-    Returns:
-        str: The Formatted File Size
-    """
-
-    # Define Size Units
-    units = ["B", "KB", "MB", "GB", "TB", "PB"]
-
-    # Initialize Unit Index
-    unit_index = 0
-
-    # Convert Size
-    size_float = float(size)
-
-    # While The Size Is Greater Than 1024
-    while size_float >= 1024 and unit_index < len(units) - 1:
-        # Divide By 1024
-        size_float /= 1024
-
-        # Increment Unit Index
-        unit_index += 1
-
-    # Return Formatted Size
-    return f"{size_float:.2f} {units[unit_index]}"
 
 
 # Exports

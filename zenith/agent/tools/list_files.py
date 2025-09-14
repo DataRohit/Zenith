@@ -11,6 +11,8 @@ from typing import Any
 # Third Party Imports
 from dateutil import tz
 
+from zenith.utils.format_file_size import format_size
+
 # Type Checking Imports
 if TYPE_CHECKING:
     # Standard Library Imports
@@ -115,7 +117,7 @@ def _create_node(path: str) -> dict[str, Any]:
         "path": path,
         "type": file_type,
         "size": size,
-        "size_human": _format_size(size),
+        "size_human": format_size(size),
         "modified_time": modified_time,
         "access_time": access_time,
         "permissions": permissions,
@@ -177,39 +179,6 @@ def _build_tree(node: dict[str, Any], project_root: Path, gitignore_patterns: li
         # Handle Permission Errors
         node["children"] = []
         node["error"] = "Permission Denied"
-
-
-# Helper Function To Format File Size
-def _format_size(size: int) -> str:
-    """
-    Formats The File Size In A Human-Readable Format
-
-    Args:
-        size (int): The File Size In Bytes
-
-    Returns:
-        str: The Formatted File Size
-    """
-
-    # Define Size Units
-    units = ["B", "KB", "MB", "GB", "TB", "PB"]
-
-    # Initialize Unit Index
-    unit_index = 0
-
-    # Convert Size
-    size_float = float(size)
-
-    # While The Size Is Greater Than 1024
-    while size_float >= 1024 and unit_index < len(units) - 1:
-        # Divide By 1024
-        size_float /= 1024
-
-        # Increment Unit Index
-        unit_index += 1
-
-    # Return Formatted Size
-    return f"{size_float:.2f} {units[unit_index]}"
 
 
 # Helper Function To Get File Permissions

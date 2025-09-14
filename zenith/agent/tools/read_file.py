@@ -2,6 +2,8 @@
 from pathlib import Path
 from typing import Any
 
+from zenith.utils.format_file_size import format_size
+
 
 # Function To Read File Contents
 def read_file(
@@ -106,7 +108,7 @@ def read_file(
             "path": str(abs_path),
             "content": content,
             "size": file_size,
-            "size_human": _format_size(file_size),
+            "size_human": format_size(file_size),
             "line_count": line_count,
             "selected_line_count": selected_line_count,
             "encoding": encoding,
@@ -151,39 +153,6 @@ def file_exists(file_path: str) -> bool:
 
     # Return Whether The Path Exists And Is A File
     return abs_path.exists() and abs_path.is_file()
-
-
-# Helper Function To Format File Size
-def _format_size(size: int) -> str:
-    """
-    Formats The File Size In A Human-Readable Format
-
-    Args:
-        size (int): The File Size In Bytes
-
-    Returns:
-        str: The Formatted File Size
-    """
-
-    # Define Size Units
-    units: list[str] = ["B", "KB", "MB", "GB", "TB", "PB"]
-
-    # Initialize Unit Index
-    unit_index: int = 0
-
-    # Convert Size
-    size_float: float = float(size)
-
-    # While The Size Is Greater Than 1024
-    while size_float >= 1024 and unit_index < len(units) - 1:
-        # Divide By 1024
-        size_float /= 1024
-
-        # Increment Unit Index
-        unit_index += 1
-
-    # Return Formatted Size
-    return f"{size_float:.2f} {units[unit_index]}"
 
 
 # Exports

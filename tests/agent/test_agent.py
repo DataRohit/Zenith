@@ -150,7 +150,7 @@ def test_create_assistant_agent(
         model_client_stream=True,
         memory=[mock_list_memory.return_value],
         model_context=mock_buffered_context.return_value,
-        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
+        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
         max_tool_iterations=16,
     )
 
@@ -271,7 +271,7 @@ def test_create_assistant_agent_with_custom_values(
         model_client_stream=True,
         memory=[mock_list_memory.return_value],
         model_context=mock_buffered_context.return_value,
-        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
+        tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
         max_tool_iterations=16,
     )
 

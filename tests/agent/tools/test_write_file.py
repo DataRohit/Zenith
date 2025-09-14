@@ -8,10 +8,8 @@ import pytest
 
 # Local Imports
 from zenith.agent.tools.write_file import file_is_writable
-from zenith.agent.tools.write_file import _format_size
 from zenith.agent.tools.write_file import write_file
-from zenith.agent.tools.write_file import write_file
-from zenith.agent.tools.write_file import write_file
+from zenith.utils.format_file_size import format_size
 
 
 # Test Write File Function
@@ -378,7 +376,7 @@ def test_format_size_bytes() -> None:
     """
 
     # Test Bytes
-    assert _format_size(500) == "500.00 B"
+    assert format_size(500) == "500.00 B"
 
 
 # Test Format Size Function For Kilobytes
@@ -388,7 +386,7 @@ def test_format_size_kilobytes() -> None:
     """
 
     # Test Kilobytes
-    assert _format_size(1500) == "1.46 KB"
+    assert format_size(1500) == "1.46 KB"
 
 
 # Test Format Size Function For Megabytes
@@ -398,7 +396,7 @@ def test_format_size_megabytes() -> None:
     """
 
     # Test Megabytes
-    assert _format_size(1500000) == "1.43 MB"
+    assert format_size(1500000) == "1.43 MB"
 
 
 # Test Format Size Function For Gigabytes
@@ -408,7 +406,7 @@ def test_format_size_gigabytes() -> None:
     """
 
     # Test Gigabytes
-    assert _format_size(1500000000) == "1.40 GB"
+    assert format_size(1500000000) == "1.40 GB"
 
 
 # Test Format Size Function For Terabytes
@@ -418,7 +416,7 @@ def test_format_size_terabytes() -> None:
     """
 
     # Test Terabytes
-    assert _format_size(1500000000000) == "1.36 TB"
+    assert format_size(1500000000000) == "1.36 TB"
 
 
 # Test Format Size Function For Petabytes
@@ -428,7 +426,7 @@ def test_format_size_petabytes() -> None:
     """
 
     # Test Petabytes
-    assert _format_size(1500000000000000) == "1.33 PB"
+    assert format_size(1500000000000000) == "1.33 PB"
 
 # Test Write File With UnicodeEncodeError
 def test_write_file_unicode_encode_error() -> None:
