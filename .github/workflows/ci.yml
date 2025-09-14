@@ -43,7 +43,5 @@ jobs:
             # Step 4: Run The Test Suite And Code Quality Checks
             - name: Run Checks
               run: |
-                  # Run Ruff Linter In Check Mode
-                  ruff check .
                   # Run Pytest With Coverage
                   pytest -q

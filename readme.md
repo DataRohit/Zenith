@@ -1,7 +1,7 @@
-# Zenith
+# Zenith-CLI
 
 <!-- Project Status -->
-[![Project Status: Active](https://img.shields.io/badge/Project%20Status-Active-brightgreen)](https://github.com/datarohit/zenith)
+[![Project Status: Active](https://img.shields.io/badge/Project%20Status-Active-brightgreen)](https://github.com/datarohit/zenith-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./license)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue)](#)
 [![Coverage: 100%](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](./htmlcov/index.html)
@@ -12,8 +12,8 @@
 [![Rich](https://img.shields.io/badge/Rich-1.8.1-darkblue.svg?logo=python&logoColor=white)](https://github.com/Textualize/rich)
 [![AutoGen](https://img.shields.io/badge/AutoGen-0.7.4-brightgreen.svg?logo=python&logoColor=white)](https://microsoft.github.io/autogen/)
 [![Python-Dateutil](https://img.shields.io/badge/Python--Dateutil-2.9.0-blue.svg)](https://dateutil.readthedocs.io/en/stable/)
-[![Python-Dotenv](https://img.shields.io/badge/Python--Dotenv-1.1.1-green.svg)](https://pypi.org/project/python-dotenv/)
-[![OpenAI](https://img.shields.io/badge/OpenAI-API-424242.svg?logo=openai&logoColor=white)](https://openai.com/docs/api-reference/)
+[![Python-Dotenv](https://img.io/badge/Python--Dotenv-1.1.1-green.svg)](https://pypi.org/project/python-dotenv/)
+[![OpenAI](https://img.io/badge/OpenAI-API-424242.svg?logo=openai&logoColor=white)](https://openai.com/docs/api-reference/)
 
 **A CLI-Based AI Coding Agent That Transforms Natural Language Into Efficient, Production-Ready Code.**
 
@@ -22,7 +22,7 @@
 ### Core Features
 
 -   **⚡ AI-Powered Code Generation**: Transform natural language instructions into high-quality, production-ready code.
--   **🗣️ Interactive Chat Interface**: Engage with Zenith through a rich, console-based chat experience.
+-   **🗣️ Interactive Chat Interface**: Engage with Zenith-CLI through a rich, console-based chat experience.
 -   **🔧 Extensible Toolset**: Utilizes a suite of file system tools (list, read, write, search, make directory, replace content) to interact with the codebase.
 -   **⚙️ Flexible Configuration**: Easily configure OpenAI API keys, base URLs, and models via JSON or ENV files.
 -   **🚀 Streaming Responses**: Provides real-time feedback from the AI agent through streaming.
@@ -54,8 +54,8 @@
 ### 1) Clone Repository
 
 ```bash
-git clone https://github.com/DataRohit/Zenith.git
-cd Zenith
+git clone https://github.com/DataRohit/zenith-cli.git
+cd zenith-cli
 ```
 
 ### 2) Install Dependencies
@@ -66,9 +66,9 @@ pip install -e .
 
 ### 3) Configure Environment
 
-Create a `.zenith/config.json` or `.zenith/.config.env` file in your project root.
+Create a `.zenith-cli/config.json` or `.zenith-cli/.config.env` file in your project root.
 
-**Example using `.zenith/config.json`:**
+**Example using `.zenith-cli/config.json`:**
 
 ```json
 {
@@ -78,7 +78,7 @@ Create a `.zenith/config.json` or `.zenith/.config.env` file in your project roo
 }
 ```
 
-**Example using `.zenith/.config.env`:**
+**Example using `.zenith-cli/.config.env`:**
 
 ```env
 ZENITH_OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
@@ -89,12 +89,12 @@ ZENITH_MODEL="gpt-4"
 Notes:
 
 -   Keep secrets in `.env` or `config.json` files; do not commit them to version control.
--   If both `config.json` and `.config.env` exist in the `.zenith` directory, the application will raise an error.
+-   If both `config.json` and `.config.env` exist in the `.zenith-cli` directory, the application will raise an error.
 
-### 4) Run Zenith
+### 4) Run Zenith-CLI
 
 ```bash
-zenith chat
+zenith-cli chat
 ```
 
 ## ⚙️ Configuration Highlights
@@ -132,7 +132,7 @@ Ruff and Pytest are configured in `pyproject.toml`.
 
 ## 🔐 Environment Variables
 
-Environment variables are loaded from `.zenith/config.json` or `.zenith/.config.env`.
+Environment variables are loaded from `.zenith-cli/config.json` or `.zenith-cli/.config.env`.
 
 **Critical:** Never commit sensitive values like API keys to version control.
 
@@ -160,4 +160,4 @@ This Project Is Licensed Under The MIT License — See The [`license`](./license
 
 Rohit Ingole — <rohit.vilas.ingole@gmail.com>
 
-Project Link: <https://github.com/DataRohit/Zenith>
+Project Link: <https://github.com/DataRohit/zenith-cli>

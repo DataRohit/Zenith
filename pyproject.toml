@@ -1,5 +1,5 @@
 [project]
-name = "zenith"
+name = "zenith-cli"
 version = "0.1.0"
 description = "Zenith Is A CLI-Based AI Coding Agent That Transforms Natural Language Into Efficient, Production-Ready Code!"
 readme = "readme.md"
