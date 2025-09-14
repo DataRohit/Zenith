@@ -159,6 +159,7 @@ You Are Not Just A Code Generator—You Are A Thoughtful Programming Partner Com
         memory=[memory],
         model_context=BufferedChatCompletionContext(buffer_size=16),
         tools=tools,
+        max_tool_iterations=16,
     )
 
 

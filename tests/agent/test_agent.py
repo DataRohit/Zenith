@@ -150,6 +150,7 @@ def test_create_assistant_agent(
         memory=[mock_list_memory.return_value],
         model_context=mock_buffered_context.return_value,
         tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
+        max_tool_iterations=16,
     )
 
     # Assert FunctionTool Was Called With The Correct Arguments
@@ -248,6 +249,7 @@ def test_create_assistant_agent_with_custom_values(
         memory=[mock_list_memory.return_value],
         model_context=mock_buffered_context.return_value,
         tools=[mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value, mock_function_tool.return_value],
+        max_tool_iterations=16,
     )
 
     # Assert FunctionTool Was Called With The Correct Arguments
