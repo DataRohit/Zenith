@@ -83,16 +83,25 @@ def test_create_model_client_with_defaults(mock_client: MagicMock) -> None:
 
 
 # Test For create_assistant_agent Function
-@patch("zenith.agent.agent.create_model_client")
+@patch("zenith.agent.agent.FunctionTool")
 @patch("zenith.agent.agent.AssistantAgent")
+@patch("zenith.agent.agent.BufferedChatCompletionContext")
+@patch("zenith.agent.agent.ListMemory")
+@patch("zenith.agent.agent.create_model_client")
 def test_create_assistant_agent(
-    mock_assistant: MagicMock, mock_create_model_client: MagicMock
+    mock_create_model_client: MagicMock,
+    mock_list_memory: MagicMock,
+    mock_buffered_context: MagicMock,
+    mock_assistant: MagicMock,
+    mock_function_tool: MagicMock
 ) -> None:
     """
     Tests The create_assistant_agent Function
 
     Args:
         mock_assistant (MagicMock): The Mock For AssistantAgent
+        mock_buffered_context (MagicMock): The Mock For BufferedChatCompletionContext
+        mock_list_memory (MagicMock): The Mock For ListMemory
         mock_create_model_client (MagicMock): The Mock For create_model_client
     """
 
@@ -121,6 +130,12 @@ def test_create_assistant_agent(
     # Assert create_model_client Was Called With The Correct Arguments
     mock_create_model_client.assert_called_once_with(mock_config)
 
+    # Assert ListMemory Was Called
+    mock_list_memory.assert_called_once()
+
+    # Assert BufferedChatCompletionContext Was Called With The Correct Arguments
+    mock_buffered_context.assert_called_once_with(buffer_size=16)
+
     # Assert AssistantAgent Was Called With The Correct Arguments
     mock_assistant.assert_called_once_with(
         name="Zenith",
@@ -128,20 +143,32 @@ def test_create_assistant_agent(
         system_message=mock_system_message,
         model_client=mock_create_model_client.return_value,
         model_client_stream=True,
+        memory=[mock_list_memory.return_value],
+        model_context=mock_buffered_context.return_value,
+        tools=[mock_function_tool.return_value],
     )
 
 
 # Test For create_assistant_agent Function With Custom Values From Config
-@patch("zenith.agent.agent.create_model_client")
+@patch("zenith.agent.agent.FunctionTool")
 @patch("zenith.agent.agent.AssistantAgent")
+@patch("zenith.agent.agent.BufferedChatCompletionContext")
+@patch("zenith.agent.agent.ListMemory")
+@patch("zenith.agent.agent.create_model_client")
 def test_create_assistant_agent_with_custom_values(
-    mock_assistant: MagicMock, mock_create_model_client: MagicMock
+    mock_create_model_client: MagicMock,
+    mock_list_memory: MagicMock,
+    mock_buffered_context: MagicMock,
+    mock_assistant: MagicMock,
+    mock_function_tool: MagicMock
 ) -> None:
     """
     Tests The create_assistant_agent Function With Custom Values From Config
 
     Args:
         mock_assistant (MagicMock): The Mock For AssistantAgent
+        mock_buffered_context (MagicMock): The Mock For BufferedChatCompletionContext
+        mock_list_memory (MagicMock): The Mock For ListMemory
         mock_create_model_client (MagicMock): The Mock For create_model_client
     """
 
@@ -161,6 +188,12 @@ def test_create_assistant_agent_with_custom_values(
     # Assert create_model_client Was Called With The Correct Arguments
     mock_create_model_client.assert_called_once_with(config)
 
+    # Assert ListMemory Was Called
+    mock_list_memory.assert_called_once()
+
+    # Assert BufferedChatCompletionContext Was Called With The Correct Arguments
+    mock_buffered_context.assert_called_once_with(buffer_size=16)
+
     # Assert AssistantAgent Was Called With The Correct Arguments
     mock_assistant.assert_called_once_with(
         name="custom_assistant",
@@ -168,4 +201,7 @@ def test_create_assistant_agent_with_custom_values(
         system_message="Custom System Message",
         model_client=mock_create_model_client.return_value,
         model_client_stream=True,
+        memory=[mock_list_memory.return_value],
+        model_context=mock_buffered_context.return_value,
+        tools=[mock_function_tool.return_value],
     )

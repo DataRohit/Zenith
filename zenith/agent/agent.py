@@ -1,7 +1,13 @@
 # Third Party Imports
 from autogen_agentchat.agents import AssistantAgent
+from autogen_core.memory import ListMemory
+from autogen_core.model_context import BufferedChatCompletionContext
 from autogen_core.models import ModelFamily
+from autogen_core.tools import FunctionTool
 from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+# Local Imports
+from zenith.agent.tools.list_files import list_files
 
 
 # Function To Create A Model Client
@@ -104,6 +110,20 @@ You Are Not Just A Code Generator—You Are A Thoughtful Programming Partner Com
     # Create The Model Client
     model_client: OpenAIChatCompletionClient = create_model_client(config)
 
+    # Create The Memory
+    memory: ListMemory = ListMemory()
+
+    # Create The Tools Dictionary
+    tools: list[FunctionTool] = [
+        FunctionTool(
+            func=list_files,
+            name="list_files",
+            description=(
+                "List All Files and Folders with Metadata in a Tree-Like Structure, Respecting .gitignore Patterns."
+            ),
+        ),
+    ]
+
     # Create And Return The Assistant Agent
     return AssistantAgent(
         name=name,
@@ -111,6 +131,9 @@ You Are Not Just A Code Generator—You Are A Thoughtful Programming Partner Com
         system_message=system_message,
         model_client=model_client,
         model_client_stream=True,
+        memory=[memory],
+        model_context=BufferedChatCompletionContext(buffer_size=16),
+        tools=tools,
     )
 
 
