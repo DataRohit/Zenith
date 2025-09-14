@@ -7,6 +7,8 @@ from openai import APITimeoutError
 from openai import BadRequestError
 from openai import NotFoundError
 from rich.console import Console
+from rich.live import Live
+from rich.markdown import Markdown
 from rich.text import Text
 
 # Local Imports
@@ -210,18 +212,66 @@ async def process_agent_response(console: Console, agent: AssistantAgent, user_i
         user_input (str): The User Input
     """
 
-    # Display Agent Prompt
-    display_agent_prompt(console, agent.name)
+    # Create And Start Spinner
+    spinner = console.status(status=f"{agent.name} Is Thinking...", spinner="dots")
+    spinner.start()
 
-    # Get The Streaming Response
-    stream = agent.run_stream(task=user_input)
+    # Flag To Track The First Chunk
+    first_chunk = True
 
-    # Process The Streaming Response
-    async for message in stream:
-        # Check If The Message Is A Streaming Chunk
-        if hasattr(message, "type") and message.type == "ModelClientStreamingChunkEvent":
-            # Print The Content Without Line Ending
-            console.print(message.content, end="")
+    # Variable To Store The Full Message
+    full_message = ""
+
+    # Create a Live display object (but don't start it yet)
+    live = None
+
+    try:
+        # Get The Streaming Response
+        stream = agent.run_stream(task=user_input)
+
+        # Process The Streaming Response
+        async for message in stream:
+            # Check If The Message Is A Streaming Chunk
+            if hasattr(message, "type") and message.type == "ModelClientStreamingChunkEvent":
+                # If It's The First Chunk
+                if first_chunk:
+                    # Stop The Spinner
+                    spinner.stop()
+
+                    # Display The Agent Prompt
+                    display_agent_prompt(
+                        console=console,
+                        agent_name=agent.name,
+                    )
+
+                    # Initialize the Live display
+                    live = Live("", console=console, auto_refresh=True, refresh_per_second=10)
+                    live.start()
+
+                    # Set The Flag To False
+                    first_chunk = False
+
+                # Append The New Chunk To The Full Message
+                full_message += message.content
+
+                # If The Live Display Is Started
+                if live:
+                    # Render The Full Message As Markdown
+                    markdown_content = Markdown(full_message)
+
+                    # Update The Live Display With The Markdown Content
+                    live.update(markdown_content)
+
+    finally:
+        # If No Chunks Were Received
+        if first_chunk:
+            # Stop The Spinner
+            spinner.stop()
+
+        # If The Live Display Is Started
+        elif live:
+            # Stop The Live Display
+            live.stop()
 
     # Print Newline For Spacing After The Response
     console.print()
@@ -240,7 +290,7 @@ def start_chat(agent: AssistantAgent) -> None:
     console: Console = Console()
 
     # Display The Initial Message
-    display_initial_message(console)
+    display_initial_message(console=console)
 
     # Start Chat Loop
     chat_active = True
@@ -249,12 +299,12 @@ def start_chat(agent: AssistantAgent) -> None:
         # While The Chat Is Active
         while chat_active:
             # Get User Input
-            user_input = display_user_prompt(console)
+            user_input = display_user_prompt(console=console)
 
             # Check If User Wants To Exit
             if user_input.lower() in ["quit", "exit"]:
                 # Display Closing Message
-                display_closing_message(console)
+                display_closing_message(console=console)
 
                 # Exit The Loop
                 chat_active = False
@@ -266,35 +316,50 @@ def start_chat(agent: AssistantAgent) -> None:
             console.print("")
 
             # Process The Agent Response
-            asyncio.run(process_agent_response(console, agent, user_input))
+            asyncio.run(
+                process_agent_response(
+                    console=console,
+                    agent=agent,
+                    user_input=user_input,
+                ),
+            )
 
     except KeyboardInterrupt:
         # Display A New Line For Better Formatting
         console.print("")
 
         # Display Closing Message
-        display_closing_message(console)
+        display_closing_message(console=console)
 
     except BadRequestError:
         # Display A New Line For Better Formatting
         console.print("")
 
         # Display Error Message Using Consistent Formatting
-        display_error_message(console, "Invalid API Key! Please Pass A Valid API Key!")
+        display_error_message(
+            console=console,
+            error_message="Invalid API Key! Please Pass A Valid API Key!",
+        )
 
     except APITimeoutError:
         # Display A New Line For Better Formatting
         console.print("")
 
         # Display Error Message Using Consistent Formatting
-        display_error_message(console, "API Timeout! Please Check API Base URL And API Key!")
+        display_error_message(
+            console=console,
+            error_message="API Timeout! Please Check API Base URL And API Key!",
+        )
 
     except NotFoundError:
         # Display A New Line For Better Formatting
         console.print("")
 
         # Display Error Message Using Consistent Formatting
-        display_error_message(console, "Invalid Model! Please Check Model Name!")
+        display_error_message(
+            console=console,
+            error_message="Invalid Model! Please Check Model Name!",
+        )
 
 
 # Exports
